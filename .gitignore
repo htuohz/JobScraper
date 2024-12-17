@@ -1,0 +1,88 @@
+# ============================
+#  通用配置 (根目录)
+# ============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor and IDE folders
+.vscode/
+.idea/
+.vscode-server/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.pid
+*.seed
+*.bak
+
+# Git merge conflict files
+*.orig
+*.rej
+
+# ============================
+#  前端：job-dashboard
+# ============================
+
+# Node modules and builds
+job-dashboard/node_modules/
+job-dashboard/dist/
+job-dashboard/build/
+
+# Cache and ESLint
+job-dashboard/.cache/
+job-dashboard/.vite/
+job-dashboard/.eslintcache
+
+# Environment files
+job-dashboard/.env
+job-dashboard/.env.local
+job-dashboard/.env.development
+job-dashboard/.env.production
+
+# Logs
+job-dashboard/npm-debug.log
+job-dashboard/yarn-debug.log
+job-dashboard/yarn-error.log
+
+# Test coverage
+job-dashboard/coverage/
+
+# TypeScript build cache
+job-dashboard/*.tsbuildinfo
+
+# ============================
+#  后端：JobScraperAPI
+# ============================
+
+# Build output
+JobScraperAPI/bin/
+JobScraperAPI/obj/
+JobScraperAPI/*.exe
+JobScraperAPI/*.dll
+JobScraperAPI/*.pdb
+
+# Entity Framework Migrations
+JobScraperAPI/Migrations/
+
+# Local databases
+JobScraperAPI/*.sqlite
+JobScraperAPI/*.db
+JobScraperAPI/*.mdf
+JobScraperAPI/*.ldf
+
+# NuGet Packages
+JobScraperAPI/packages/
+JobScraperAPI/project.lock.json
+JobScraperAPI/project.fragment.lock.json
+JobScraperAPI/.nuget/
+
+# Environment files
+JobScraperAPI/.env
+JobScraperAPI/.env.development
+JobScraperAPI/.env.production
+
+# Logs
+JobScraperAPI/*.log

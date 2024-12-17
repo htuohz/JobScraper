@@ -1,0 +1,23 @@
+{
+    "websites": [
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/jobs",
+        "selectors": {
+          "jobTitle": "//h3[contains(@class, 'job-card-title')]",
+          "company": "//h4[contains(@class, 'job-card-company')]",
+          "location": "//span[contains(@class, 'job-card-location')]"
+        }
+      },
+      {
+        "name": "SEEK",
+        "url": "https://www.seek.com.au/jobs",
+        "selectors": {
+          "jobTitle": "//a[contains(@data-automation, 'jobTitle')]",
+          "company": "//a[contains(@data-automation, 'jobCompany')]",
+          "location": "//span[contains(@data-automation, 'jobLocation')]"
+        }
+      }
+    ]
+  }
+  
