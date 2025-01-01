@@ -27,14 +27,14 @@ jobs:
     # Restore dependencies
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: JobScraper/JobScraper.API
+      working-directory: JobScraper.API
 
     # Build the solution
     - name: Build
       run: dotnet build --no-restore
-      working-directory: JobScraper/JobScraper.API
+      working-directory: JobScraper.API
 
     # Run tests
     - name: Run tests
       run: dotnet test --no-build --verbosity normal
-      working-directory: JobScraper/JobScraper.Tests
+      working-directory: JobScraper.Tests
