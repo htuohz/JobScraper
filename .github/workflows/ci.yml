@@ -33,6 +33,11 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: JobScraper.API
+    
+    # Build Tests
+    - name: Build Tests
+      run: dotnet build JobScraper.Tests
+      working-directory: JobScraper.Tests
 
     # Run tests
     - name: Run tests
