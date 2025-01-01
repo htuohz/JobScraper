@@ -22,15 +22,19 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0
+    
 
     # Restore dependencies
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: JobScraper/JobScraper.API
 
     # Build the solution
     - name: Build
       run: dotnet build --no-restore
+      working-directory: JobScraper/JobScraper.API
 
     # Run tests
     - name: Run tests
       run: dotnet test --no-build --verbosity normal
+      working-directory: JobScraper/JobScraper.Tests
