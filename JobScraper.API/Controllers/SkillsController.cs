@@ -57,7 +57,7 @@ public class SkillsController : ControllerBase
     [HttpGet("getTopLocationsBySkills")]
     public async Task<IActionResult> GetTopLocationsBySkills(string[] skills, string limit = "10")
     {
-        if (string.IsNullOrEmpty(skill))
+        if (string.IsNullOrEmpty(skills))
         {
             return BadRequest("Skill is required.");
         }
