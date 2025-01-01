@@ -11,18 +11,11 @@ export interface Job {
   // SkillData.ts
   export interface SkillData {
     skill: string;
-    frequency: number;
-  }
-  
-  // IndustryData.ts
-  export interface IndustryData {
-    industry: string;
     count: number;
   }
   
-  // LocationData.ts
-  export interface LocationData {
-    location: string;
-    count: number;
-  }
+export interface JobSearchResult {
+    jobs: Job[];
+    totalPages: number
+}
   

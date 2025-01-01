@@ -58,31 +58,47 @@ job-dashboard/*.tsbuildinfo
 # ============================
 
 # Build output
-JobScraperAPI/bin/
-JobScraperAPI/obj/
-JobScraperAPI/*.exe
-JobScraperAPI/*.dll
-JobScraperAPI/*.pdb
+JobScraper.API/bin/
+JobScraper.API/obj/
+JobScraper.API/*.exe
+JobScraper.API/*.dll
+JobScraper.API/*.pdb
 
 # Entity Framework Migrations
-JobScraperAPI/Migrations/
+JobScraper.API/Migrations/
 
 # Local databases
-JobScraperAPI/*.sqlite
-JobScraperAPI/*.db
-JobScraperAPI/*.mdf
-JobScraperAPI/*.ldf
+JobScraper.API/*.sqlite
+JobScraper.API/*.db
+JobScraper.API/*.mdf
+JobScraper.API/*.ldf
 
 # NuGet Packages
-JobScraperAPI/packages/
-JobScraperAPI/project.lock.json
-JobScraperAPI/project.fragment.lock.json
-JobScraperAPI/.nuget/
+JobScraper.API/packages/
+JobScraper.API/project.lock.json
+JobScraper.API/project.fragment.lock.json
+JobScraper.API/.nuget/
 
 # Environment files
-JobScraperAPI/.env
-JobScraperAPI/.env.development
-JobScraperAPI/.env.production
+JobScraper.API/.env
+JobScraper.API/.env.development
+JobScraper.API/.env.production
 
 # Logs
-JobScraperAPI/*.log
+JobScraper.API/*.log
+
+# Python
+__pycache__/
+python-ml/*.py[cod]
+python-ml/*.pyo
+python-ml/*.pyd
+python-ml/*.env
+python-ml/*.venv
+python-ml/venv/
+python-ml/ENV/
+python-ml/env.bak/
+python-ml/*.sqlite3
+
+# Test
+JobScraper.Tests/bin/
+JobScraper.Tests/obj/

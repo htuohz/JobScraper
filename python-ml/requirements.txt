@@ -1,0 +1,7 @@
+spacy
+scikit-learn
+pandas
+numpy
+matplotlib
+flask  # Optional: For exposing APIs
+requests  # Optional: For calling the ASP.NET backend

@@ -1,0 +1,142 @@
+{
+  "SEEK": [
+    {
+      "Id": "6201",
+      "Name": "IT & Technology"
+    },
+    {
+      "Id": "1200",
+      "Name": "Accounting"
+    },
+    {
+      "Id": "7000",
+      "Name": "Healthcare & Medical"
+    },
+    {
+      "Id": "6251",
+      "Name": "Administration &amp; Office Support"
+    },
+    {
+      "Id": "6304",
+      "Name": "Advertising, Arts &amp; Media"
+    },
+    {
+      "Id": "1203",
+      "Name": "Banking &amp; Financial Services"
+    },
+    {
+      "Id": "1204",
+      "Name": "Call Centre &amp; Customer Service"
+    },
+    {
+      "Id": "7019",
+      "Name": "CEO &amp; General Management"
+    },
+    {
+      "Id": "6163",
+      "Name": "Community Services &amp; Development"
+    },
+    {
+      "Id": "1206",
+      "Name": "Construction"
+    },
+    {
+      "Id": "6076",
+      "Name": "Consulting &amp; Strategy"
+    },
+    {
+      "Id": "6263",
+      "Name": "Design &amp; Architecture"
+    },
+    {
+      "Id": "6123",
+      "Name": "Education &amp; Training"
+    },
+    {
+      "Id": "1209",
+      "Name": "Engineering"
+    },
+    {
+      "Id": "6205",
+      "Name": "Farming, Animals &amp; Conservation"
+    },
+    {
+      "Id": "1210",
+      "Name": "Government &amp; Defence"
+    },
+    {
+      "Id": "1211",
+      "Name": "Healthcare &amp; Medical"
+    },
+    {
+      "Id": "1212",
+      "Name": "Hospitality &amp; Tourism"
+    },
+    {
+      "Id": "6317",
+      "Name": "Human Resources &amp; Recruitment"
+    },
+    {
+      "Id": "6281",
+      "Name": "Information &amp; Communication Technology"
+    },
+    {
+      "Id": "1214",
+      "Name": "Insurance &amp; Superannuation"
+    },
+    {
+      "Id": "1216",
+      "Name": "Legal"
+    },
+    {
+      "Id": "6092",
+      "Name": "Manufacturing, Transport &amp; Logistics"
+    },
+    {
+      "Id": "6008",
+      "Name": "Marketing &amp; Communications"
+    },
+    {
+      "Id": "6058",
+      "Name": "Mining, Resources &amp; Energy"
+    },
+    {
+      "Id": "1220",
+      "Name": "Real Estate &amp; Property"
+    },
+    {
+      "Id": "6043",
+      "Name": "Retail &amp; Consumer Products"
+    },
+    {
+      "Id": "6362",
+      "Name": "Sales"
+    },
+    {
+      "Id": "1223",
+      "Name": "Science &amp; Technology"
+    },
+    {
+      "Id": "6261",
+      "Name": "Self Employment"
+    },
+    {
+      "Id": "6246",
+      "Name": "Sport &amp; Recreation"
+    },
+    {
+      "Id": "1225",
+      "Name": "Trades &amp; Services"
+    }
+  ],
+  "LinkedIn": [
+    {
+      "Id": "education",
+      "Name": "Education & Training"
+    },
+    {
+      "Id": "finance",
+      "Name": "Finance & Accounting"
+    }
+  ]
+}
