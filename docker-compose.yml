@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  job-scraper-api:
+    build:
+      context: .  # 指定 Dockerfile 所在目录
+      dockerfile: ./JobScraper.API/Dockerfile    # 指定 Dockerfile 的文件名
+    image: job-scraper-api
+    ports:
+      - "8080:80"             # 映射容器端口到主机端口
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./JobScraper.API   # 挂载代码目录（方便本地开发时热更新）
+
