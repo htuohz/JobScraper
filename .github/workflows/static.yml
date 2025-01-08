@@ -44,7 +44,7 @@ jobs:
         working-directory: ./job-dashboard
         run: npm run build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: job-dashboard/dist
 
