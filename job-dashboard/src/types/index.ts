@@ -18,4 +18,9 @@ export interface JobSearchResult {
     jobs: Job[];
     totalPages: number
 }
+
+export interface LocationResult {
+    location: string;
+    count: number;
+}
   

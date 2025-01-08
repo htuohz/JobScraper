@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { JobSearchResult, SkillData } from '../types';
+import { JobSearchResult, LocationResult, SkillData } from '../types';
 
 const API_BASE_URL = 'http://localhost:5182/api'; // 后端服务的地址
 
@@ -24,7 +24,7 @@ export const fetchSkillsByJob = async (jobTitle: string, location: string, limit
   return response.data;
 }
 
-export const fetchTopLocations = async (jobTitle: string, limit: number) => {
+export const fetchTopLocations = async (jobTitle: string, limit: number): Promise<LocationResult[]> => {
   const response = await axios.get(`${API_BASE_URL}/JobSearch/top-locations`, {
     params: { jobTitle, limit },
   });
