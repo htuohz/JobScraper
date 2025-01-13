@@ -1,0 +1,12 @@
+LOAD DATABASE
+     FROM sqlite://jobs.db
+     INTO postgresql://postgres:postgres@localhost:5432/JobScraper
+
+WITH
+     data only,
+     batch rows = 1000
+
+SET work_mem to '16MB',
+    maintenance_work_mem to '512MB'
+
+INCLUDING ONLY TABLE NAMES LIKE 'Job%';

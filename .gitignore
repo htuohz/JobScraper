@@ -87,6 +87,9 @@ JobScraper.API/.env.production
 # Logs
 JobScraper.API/*.log
 
+# data
+JobScraper.API/jobs.db
+
 # Python
 __pycache__/
 python-ml/*.py[cod]
