@@ -12,19 +12,6 @@ namespace JobScraper.API.Data
         {
         }
 
-        public JobContext()
-        {
-        }
-
-        // 配置数据库连接
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlite("Data Source=jobs.db"); // SQLite 数据库
-            }
-        }
-
     }
 }
 
