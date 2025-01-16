@@ -8,6 +8,9 @@ using JobScraper.API.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Services.AddCors(options =>
 {
@@ -73,7 +76,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(analyzeSkillsJobKey) // 关联 Job
         .WithIdentity("AnalyzeJobSkillsTask-trigger")
-        .WithCronSchedule("*/10 * * * * ?")); // 每10分钟执行一次
+        .WithCronSchedule("0 0 * * * ?")); // 每10分钟执行一次
 
 
     q.AddJob<UpdateCategoriesJob>(opts => opts.WithIdentity("UpdateCategoriesJob"));

@@ -26,6 +26,5 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-COPY JobScraper.API/jobs.db /app/jobs.db
 
 ENTRYPOINT ["dotnet", "JobScraperAPI.dll"]
