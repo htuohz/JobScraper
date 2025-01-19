@@ -22,6 +22,18 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    var certificatePath = Environment.GetEnvironmentVariable("CERTIFICATE_PATH") ?? "/home/ec2-user/localhost.pfx";
+    var certificatePassword = Environment.GetEnvironmentVariable("CERTIFICATE_PASSWORD") ?? "000000";
+
+    serverOptions.ListenAnyIP(8080); // HTTP
+    serverOptions.ListenAnyIP(8443, listenOptions =>
+    {
+        listenOptions.UseHttps(certificatePath, certificatePassword);
+    });
+});
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
