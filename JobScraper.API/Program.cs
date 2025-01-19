@@ -16,10 +16,16 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://job-scraper-g5jd9v22t-tianhao-zhous-projects-b0a71b1b.vercel.app") 
+        policy.WithOrigins("http://localhost:5173") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+    options.AddPolicy("AllowProdOrigins", policy =>
+    {
+        policy.WithOrigins("https://job-scraper-g5jd9v22t-tianhao-zhous-projects-b0a71b1b.vercel.app") 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    }); 
 });
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
@@ -32,6 +38,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     {
         listenOptions.UseHttps(certificatePath, certificatePassword);
     });
+    Console.WriteLine($"Using Certificate Path: {certificatePath}");
+    Console.WriteLine($"Using Certificate Password: {certificatePassword}");
 });
 
 // Add services to the container.
@@ -129,6 +137,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors("AllowSpecificOrigins");
+}
+if(app.Environment.IsProduction())
+{
+    app.UseCors("AllowProdOrigins");
 }
 
 app.UseHttpsRedirection();
