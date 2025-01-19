@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // Add your frontend's URL here
+        policy.WithOrigins("http://localhost:5173", "https://job-scraper-g5jd9v22t-tianhao-zhous-projects-b0a71b1b.vercel.app") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
