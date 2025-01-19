@@ -1,19 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Quartz;
-using JobScraper.API.Models;
 using JobScraper.API.Interfaces;
 using JobScraper.API.Services;
 using JobScraper.API.Factories;
 using JobScraper.API.Data;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // 前端地址
+        policy.WithOrigins("http://localhost:5173") // Add your frontend's URL here
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -73,7 +76,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(analyzeSkillsJobKey) // 关联 Job
         .WithIdentity("AnalyzeJobSkillsTask-trigger")
-        .WithCronSchedule("*/10 * * * * ?")); // 每10分钟执行一次
+        .WithCronSchedule("0 0 * * * ?")); // 每10分钟执行一次
 
 
     q.AddJob<UpdateCategoriesJob>(opts => opts.WithIdentity("UpdateCategoriesJob"));
@@ -102,6 +105,12 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<JobContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -111,8 +120,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
+app.UseRouting();
 app.MapControllers();
+app.MapGet("/", () => "API is running!");
 app.Run();
 

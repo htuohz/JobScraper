@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { JobSearchResult, LocationResult, SkillData } from '../types';
 
-const API_BASE_URL = 'http://localhost:5182/api'; // 后端服务的地址
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // 后端服务的地址
 
 // 获取职位列表
 export const fetchJobs = async (keyword: string, location: string, page: number = 1): Promise<JobSearchResult> => {
