@@ -53,5 +53,24 @@ public class SkillsController : ControllerBase
 
         return Ok(jobSkills);
     }
+
+    [HttpGet("getTopLocationsBySkills")]
+    public async Task<IActionResult> GetTopLocationsBySkills(string[] skills, string limit = "10")
+    {
+        if (skills == null || skills.Length == 0)
+        {
+            return BadRequest("Skill is required.");
+        }
+
+        var topLocations = await _context.JobSkills
+            .Where(js => skills.Contains(js.Skill))
+            .GroupBy(js => js.Job.Location)
+            .Select(g => new { Location = g.Key, Count = g.Count() })
+            .OrderByDescending(l => l.Count)
+            .Take(int.Parse(limit))
+            .ToListAsync();
+
+        return Ok(topLocations);
+    }
 }
 }
