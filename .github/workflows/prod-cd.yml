@@ -17,6 +17,8 @@ jobs:
         run: |
           echo "$EC2_KEY" > ec2_key.pem
           chmod 600 ec2_key.pem
+        env:
+          EC2_KEY: ${{ secrets.EC2_KEY }}
 
       - name: Deploy to EC2
         run: |
@@ -30,5 +32,4 @@ jobs:
             docker-compose -f docker-compose.override.production.yml up -d --build
           EOF
         env:
-          EC2_KEY: ${{ secrets.EC2_KEY }}
           EC2_HOST: ${{ secrets.EC2_HOST }}
