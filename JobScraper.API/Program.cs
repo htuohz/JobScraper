@@ -28,6 +28,13 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+
+    options.AddPolicy("AllowProductionFrontend", policy =>
+    {
+        policy.WithOrigins("https://www.careerlens.com.au") // 允许前端域名
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 // Add services to the container.
@@ -130,6 +137,7 @@ if (app.Environment.IsDevelopment())
 if (!app.Environment.IsProduction())
 {
     app.UseHttpsRedirection();
+    app.UseCors("AllowProductionFrontend");
 }
 
 app.UseHttpsRedirection();
