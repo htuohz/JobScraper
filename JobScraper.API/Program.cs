@@ -28,14 +28,18 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
+});
 
+builder.Services.AddCors(options =>
+{
     options.AddPolicy("AllowProductionFrontend", policy =>
     {
         policy.WithOrigins("https://www.careerlens.com.au") // 允许前端域名
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
+
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
