@@ -22,15 +22,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(8080); // HTTP
-    serverOptions.ListenAnyIP(8443, listenOptions =>
-    {
-        listenOptions.UseHttps("/certs/localhost.pfx", "your-password");
-    });
-});
-
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
