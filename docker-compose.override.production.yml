@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   job-scraper-api:
@@ -8,6 +8,7 @@ services:
     image: job-scraper-api
     ports:
       - "8080:80"
+      - "8443:8443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=job-scraper-db;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASS}
@@ -28,4 +29,3 @@ services:
 
 volumes:
   db_data:
-

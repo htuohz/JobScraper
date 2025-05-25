@@ -22,6 +22,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(8080); // HTTP
+    serverOptions.ListenAnyIP(8443, listenOptions =>
+    {
+        listenOptions.UseHttps("/certs/localhost.pfx", "your-password");
+    });
+});
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -65,7 +74,7 @@ builder.Services.AddQuartz(q =>
         .ForJob(updateJobKey)
         .WithIdentity("UpdateJobDescriptionTask-trigger")
         .WithCronSchedule("0 0 * * * ?")); // 每小时执行一次
-    
+
     // 提取技能任务的 Key
     var analyzeSkillsJobKey = new JobKey("AnalyzeJobSkillsTask");
 
@@ -84,12 +93,12 @@ builder.Services.AddQuartz(q =>
         .ForJob("UpdateCategoriesJob")
         .WithIdentity("UpdateCategoriesTrigger")
         .WithCronSchedule("0 0 0 * * ?")); // Daily at midnight 
-    
+
     q.AddJob<ScrapeJobsJob>(opts => opts.WithIdentity("ScrapeJobsJob"));
     q.AddTrigger(opts => opts
         .ForJob("ScrapeJobsJob")
         .WithIdentity("ScrapeJobsTrigger")
-        .WithCronSchedule("0 0 0 * * ?")); 
+        .WithCronSchedule("0 0 0 * * ?"));
 });
 builder.Services.AddQuartzHostedService(options =>
 {
