@@ -135,6 +135,7 @@ if (!app.Environment.IsProduction())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.MapControllers();
-app.MapGet("/", () => "API is running!");
+app.MapGet("/", () => Results.Ok("Healthy"));
+
 app.Run();
 
