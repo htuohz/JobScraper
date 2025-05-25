@@ -137,11 +137,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors("AllowSpecificOrigins");
 }
+else
+{
+    app.UseCors("AllowProductionFrontend");
+}
 
 if (!app.Environment.IsProduction())
 {
     app.UseHttpsRedirection();
-    app.UseCors("AllowProductionFrontend");
+
 }
 
 app.UseHttpsRedirection();
