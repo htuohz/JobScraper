@@ -26,11 +26,8 @@ jobs:
             echo "Pulling latest code..."
             git pull origin main
 
-            echo "Loading environment variables..."
-            export $(grep -v '^#' .env | xargs)
-
             echo "Building and starting containers..."
-            docker-compose -f docker-compose.yml -f docker-compose.override.production.yml up -d --build
+            docker-compose -f docker-compose.override.production.yml up -d --build
           EOF
         env:
           EC2_KEY: ${{ secrets.EC2_KEY }}
