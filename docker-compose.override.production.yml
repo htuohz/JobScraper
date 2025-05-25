@@ -11,7 +11,7 @@ services:
       - "8443:8443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Host=job-scraper-db;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASS}
+      - ConnectionStrings__DefaultConnection=Host=job-scraper-db;Database=JobScraper;Username=postgres;Password=strongpassword123
     depends_on:
       - job-scraper-db
 
