@@ -10,171 +10,177 @@ using JobScraper.API.Data;
 
 namespace JobScraper.API.Services
 {
-public class SeekScraper : IScraperStrategy
-{
-    private readonly HttpClient _httpClient;
-
-    public SeekScraper(HttpClient httpClient)
+    public class SeekScraper : IScraperStrategy
     {
-        _httpClient = httpClient;
-    }
+        private readonly HttpClient _httpClient;
 
-    public async Task<List<Job>> ScrapeJobsAsync(string keyword, string location, int page, int pageSize)
-    {
-        var jobs = new List<Job>();
-        bool hasMorePages = true;
-
-        while (hasMorePages)
+        public SeekScraper(HttpClient httpClient)
         {
-            var url = BuildUrl(keyword, location, page);
-            var html = await FetchHtmlAsync(url);
-            if (string.IsNullOrEmpty(html))
+            _httpClient = httpClient;
+        }
+
+        public async Task<List<Job>> ScrapeJobsAsync(string keyword, string location, int page, int pageSize)
+        {
+            var jobs = new List<Job>();
+            bool hasMorePages = true;
+
+            while (hasMorePages)
             {
-                break; // 如果没有返回 HTML，终止爬取
+                var url = BuildUrl(keyword, location, page);
+                var html = await FetchHtmlAsync(url);
+                if (string.IsNullOrEmpty(html))
+                {
+                    break; // 如果没有返回 HTML，终止爬取
+                }
+
+                var parsedJobs = ParseJobsFromHtml(html);
+
+                if (parsedJobs.Any())
+                {
+                    jobs.AddRange(parsedJobs);
+                    page++; // 下一页
+                }
+                else
+                {
+                    hasMorePages = false; // 没有更多数据，终止分页
+                }
             }
 
-            var parsedJobs = ParseJobsFromHtml(html);
 
-            if (parsedJobs.Any())
-            {
-                jobs.AddRange(parsedJobs);
-                page++; // 下一页
-            }
-            else
-            {
-                hasMorePages = false; // 没有更多数据，终止分页
-            }
+
+
+            return jobs;
         }
 
-
-
-
-        return jobs;
-    }
-
-    private string BuildUrl(string keyword, string location, int page)
-    {
-        keyword = Uri.EscapeDataString(keyword);
-        location = Uri.EscapeDataString(location);
-        return $"https://www.seek.com.au/jobs?keywords={keyword}&location={location}&page={page}";
-    }
-
-    private async Task<string> FetchHtmlAsync(string url)
-    {
-        try
+        private string BuildUrl(string keyword, string location, int page)
         {
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode(); // 确保响应成功
-            return await response.Content.ReadAsStringAsync();
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine($"Error fetching URL {url}: {ex.Message}");
-            return null; // 返回空字符串以表示失败
-        }
-    }
-
-    private List<Job> ParseJobsFromHtml(string html)
-    {
-        var jobs = new List<Job>();
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
-
-        var jobCards = doc.DocumentNode.SelectNodes("//article[contains(@data-automation, 'normalJob')]");
-
-        if (jobCards == null)
-        {
-            Console.WriteLine("No job cards found in the HTML.");
-            return jobs; // 如果没有找到职位卡片，返回空列表
+            keyword = Uri.EscapeDataString(keyword);
+            location = Uri.EscapeDataString(location);
+            return $"https://www.seek.com.au/jobs?keywords={keyword}&location={location}&page={page}";
         }
 
-        foreach (var card in jobCards)
+        private async Task<string> FetchHtmlAsync(string url)
         {
             try
             {
-                var titleNode = card.SelectSingleNode(".//a[contains(@data-automation, 'jobTitle')]");
-                var companyNode = card.SelectSingleNode(".//a[contains(@data-automation, 'jobCompany')]");
-                var locationNode = card.SelectSingleNode(".//a[contains(@data-automation, 'jobLocation')]");
-                var dateNode = card.SelectSingleNode(".//span[contains(@class, 'date')]");
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
+
+                var response = await _httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode(); // 403 会在这里抛出
+
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching URL {url}: {ex.Message}");
+                return null;
+            }
+        }
 
 
-                if (titleNode == null || companyNode == null || locationNode == null)
+        private List<Job> ParseJobsFromHtml(string html)
+        {
+            var jobs = new List<Job>();
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var jobCards = doc.DocumentNode.SelectNodes("//article[contains(@data-automation, 'normalJob')]");
+
+            if (jobCards == null)
+            {
+                Console.WriteLine("No job cards found in the HTML.");
+                return jobs; // 如果没有找到职位卡片，返回空列表
+            }
+
+            foreach (var card in jobCards)
+            {
+                try
                 {
-                    continue; // 如果任何关键字段缺失，跳过这条职位
+                    var titleNode = card.SelectSingleNode(".//a[contains(@data-automation, 'jobTitle')]");
+                    var companyNode = card.SelectSingleNode(".//a[contains(@data-automation, 'jobCompany')]");
+                    var locationNode = card.SelectSingleNode(".//a[contains(@data-automation, 'jobLocation')]");
+                    var dateNode = card.SelectSingleNode(".//span[contains(@class, 'date')]");
+
+
+                    if (titleNode == null || companyNode == null || locationNode == null)
+                    {
+                        continue; // 如果任何关键字段缺失，跳过这条职位
+                    }
+
+                    jobs.Add(new Job
+                    {
+                        Title = titleNode.InnerText.Trim(),
+                        Company = companyNode.InnerText.Trim(),
+                        Location = locationNode.InnerText.Trim(),
+                        PostedDate = dateNode?.InnerText.Trim() ?? "N/A", // 如果日期缺失，设置默认值
+                        Url = "https://www.seek.com.au" + titleNode.GetAttributeValue("href", string.Empty),
+                        Source = "SEEK",
+                        CreatedAt = DateTime.UtcNow,
+                        Description = ""
+
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error parsing job card: {ex.Message}");
+                    // 跳过当前职位，继续解析其他职位
+                }
+            }
+
+
+            return jobs;
+        }
+
+        public async Task<List<Job>> ScrapeJobsByCategoryAsync(string categoryId)
+        {
+            var jobs = new List<Job>();
+            int currentPage = 1;
+            bool hasMorePages = true;
+
+            while (hasMorePages)
+            {
+                var url = $"https://www.seek.com.au/jobs?classification={categoryId}&page={currentPage}";
+                Console.WriteLine($"Fetching URL: {url}");
+
+                var html = await FetchHtmlAsync(url);
+                if (string.IsNullOrEmpty(html))
+                {
+                    break; // 如果没有返回 HTML，终止爬取
                 }
 
-                jobs.Add(new Job
+                var parsedJobs = ParseJobsFromHtml(html);
+
+                if (parsedJobs.Any())
                 {
-                    Title = titleNode.InnerText.Trim(),
-                    Company = companyNode.InnerText.Trim(),
-                    Location = locationNode.InnerText.Trim(),
-                    PostedDate = dateNode?.InnerText.Trim() ?? "N/A", // 如果日期缺失，设置默认值
-                    Url = "https://www.seek.com.au" + titleNode.GetAttributeValue("href", string.Empty),
-                    Source = "SEEK",
-                    CreatedAt = DateTime.UtcNow,
-                    Description = ""
+                    jobs.AddRange(parsedJobs);
+                    currentPage++;
+                    await Task.Delay(new Random().Next(1000, 3000)); // Avoid being flagged as a bot
+                }
+                else
+                {
+                    hasMorePages = false; // 没有更多数据，终止分页
+                }
 
-                });
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error parsing job card: {ex.Message}");
-                // 跳过当前职位，继续解析其他职位
-            }
+
+            return jobs;
         }
 
-
-        return jobs;
-    }
-
-    public async Task<List<Job>> ScrapeJobsByCategoryAsync(string categoryId)
-    {
-        var jobs = new List<Job>();
-        int currentPage = 1;
-        bool hasMorePages = true;
-
-        while (hasMorePages)
+        public async Task<string> FetchJobDescription(string detailPageUrl)
         {
-            var url = $"https://www.seek.com.au/jobs?classification={categoryId}&page={currentPage}";
-            Console.WriteLine($"Fetching URL: {url}");
+            var client = new HttpClient();
+            var html = await client.GetStringAsync(detailPageUrl);
 
-            var html = await FetchHtmlAsync(url);
-            if (string.IsNullOrEmpty(html))
-            {
-                break; // 如果没有返回 HTML，终止爬取
-            }
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
 
-            var parsedJobs = ParseJobsFromHtml(html);
+            // 选择 description 的节点
+            var descriptionNode = doc.DocumentNode.SelectSingleNode("//div[contains(@data-automation, 'jobAdDetails')]");
 
-            if (parsedJobs.Any())
-            {
-                jobs.AddRange(parsedJobs);
-                currentPage++;
-                await Task.Delay(new Random().Next(1000, 3000)); // Avoid being flagged as a bot
-            }
-            else
-            {
-                hasMorePages = false; // 没有更多数据，终止分页
-            }
-
+            return descriptionNode?.InnerText.Trim() ?? "No description available";
         }
 
-        return jobs;
     }
-
-    public async Task<string> FetchJobDescription(string detailPageUrl)
-    {
-        var client = new HttpClient();
-        var html = await client.GetStringAsync(detailPageUrl);
-
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
-
-        // 选择 description 的节点
-        var descriptionNode = doc.DocumentNode.SelectSingleNode("//div[contains(@data-automation, 'jobAdDetails')]");
-
-        return descriptionNode?.InnerText.Trim() ?? "No description available";
-    }
-
-}
 }
